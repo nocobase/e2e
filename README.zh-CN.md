@@ -94,3 +94,22 @@ yarn e2e test my-project1
 ## 测试是隔离的吗？
 
 每个 e2e test 的环境都是隔离的，即使同一个项目同时运行多次也都是隔离的。
+
+## PR 里怎么运行 e2e
+
+切换到 e2e 对应的 NocoBase 目录（环境变量 `APP_ROOT` 所在路径），并切换到 PR 的分支
+
+```bash
+cd /app/my-nocobase  # 必须用是 APP_ROOT 的路径
+gh pr checkout 5466  # 切换到 5466 分支
+```
+
+然后运行 e2e
+
+```bash
+## 开发环境模式运行
+yarn e2e test my-project1
+
+## 生产环境模式运行
+yarn e2e test my-project1 --production
+```
