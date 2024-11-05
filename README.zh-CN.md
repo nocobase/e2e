@@ -40,8 +40,8 @@ brew install libpq
 配置 .env
 
 ```bash
-APP_ROOT=/app/my-nocobase
-APP_BASE_URL=http://localhost:${port}/
+APP_ROOT=/app/my-nocobase               # NocoBase 应用的根目录
+APP_BASE_URL=http://localhost:${port}/  # 应用 URL 模板，一般不用修改
 ```
 
 运行测试
@@ -54,6 +54,9 @@ yarn e2e test my-project1
 
 # 生产环境 yarn start 运行的 NocoBase
 yarn e2e test my-project1 --production
+
+# UI 模式
+yarn e2e test my-project1 --ui
 ```
 
 ## Projects
@@ -65,6 +68,6 @@ yarn e2e test my-project1 --production
   |- my-project1
     |- playwright                           # 测试数据及报告
     |- tests                                # 测试用例
-    |- backup_20241103_201447_2067.nbdata   # 备份文件
-    |- playwright.config.ts                 # 非必须
+    |- backup_20241103_201447_2067.nbdata   # 备份文件 .nbdata 后缀即可
+    |- playwright.config.ts                 # 非必须，特殊情况，可以自定义 playwright.config.ts 
 ```

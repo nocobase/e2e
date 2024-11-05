@@ -1,5 +1,4 @@
 import { expect, test as setup } from '@playwright/test';
-import path from 'path';
 
 // 保存登录状态，避免每次都要登录
 setup('authenticate', async ({ page }) => {
@@ -17,6 +16,6 @@ setup('authenticate', async ({ page }) => {
     localStorage.setItem('NOCOBASE_DESIGNABLE', 'true');
   });
   await page.context().storageState({
-    path: path.resolve(process.env.PROJECT_ROOT || '', 'playwright/.auth/user.json'),
+    path: process.env.AUTH_FILE_PATH,
   });
 });

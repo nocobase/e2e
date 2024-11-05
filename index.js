@@ -6,6 +6,7 @@ const getPort = require('get-port');
 const treeKill = require('tree-kill');
 const path = require('path');
 const { glob } = require('glob');
+const fs = require('fs-extra');
 
 process.on('SIGINT', async () => {
   treeKill(process.pid, (error) => {
@@ -108,6 +109,7 @@ program
 program.command('test')
   .argument('<project>')
   .option('--app-root [appRoot]')
+  .option('--ui')
   .option('--production')
   .action(async (project, options) => {
     require('dotenv').config();
@@ -150,11 +152,27 @@ program.command('test')
     });
     console.log(`Visit: ${APP_BASE_URL}`);
     await appReady({ appBaseURL: APP_BASE_URL });
-    await execa('yarn', ['playwright', 'test'], {
+    const args = ['playwright', 'test'];
+
+    const configFile = path.resolve(PROJECT_ROOT, 'playwright.config.ts');
+    const exists = await fs.exists(configFile);
+
+    if (exists) {
+      args.push(`--config=${configFile}`);
+    }
+
+    if (options.ui) {
+      args.push('--ui');
+    }
+
+    const AUTH_FILE_PATH = path.resolve(PROJECT_ROOT, `playwright/.auth/user-${DB_SCHEMA}.json`);
+
+    await execa('yarn', args, {
       stdio: 'inherit',
       env: {
         PROJECT_ROOT,
         APP_BASE_URL,
+        AUTH_FILE_PATH,
       },
     });
     process.exit();

@@ -16,6 +16,6 @@ setup('authenticate', async ({ page }) => {
     localStorage.setItem('NOCOBASE_DESIGNABLE', 'true');
   });
   await page.context().storageState({
-    path: 'playwright/.auth/user.json',
+    path: process.env.AUTH_FILE_PATH,
   });
 });
