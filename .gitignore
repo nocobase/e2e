@@ -1,0 +1,5 @@
+node_modules/
+/projects/**/playwright/
+.DS_Store
+yarn.lock
+.env
