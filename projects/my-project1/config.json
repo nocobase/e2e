@@ -1,0 +1,7 @@
+{
+  "displayName": "My Project1",
+  "env": {
+    "DB_DIALECT": "postgres",
+    "DB_UNDERSCORED": true
+  }
+}

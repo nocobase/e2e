@@ -19,6 +19,7 @@
     "tree-kill": "^1.2.2"
   },
   "scripts": {
+    "postinstall": "node index.js postinstall",
     "e2e": "node index.js"
   }
 }

@@ -1,59 +1,80 @@
 # 开发指南
 
-## 安装 NocoBase
-
-参考安装指南先下载 NocoBase
-
-https://docs-cn.nocobase.com/welcome/getting-started/installation
-
-修改 .env 文件的环境变量配置（目前仅支持 PostgreSQL 数据库）
+## 下载 nocobase/nocobase 和 nocobase/e2e
 
 ```bash
-TZ=Asia/Shanghai
-APP_KEY=your-secret-key
-DB_HOST=localhost
-DB_PORT=5432
-DB_DATABASE=postgres
-DB_USER=nocobase
-DB_PASSWORD=nocobase
+cd /home/nocobase/ # 根据实际情况调整
+git clone https://github.com/nocobase/nocobase.git -b next --depth=1 nocobase-app
+git clone https://github.com/nocobase/e2e.git --depth=1 nocobase-e2e
+
+# 下载依赖
+cd /home/nocobase/nocobase-app && yarn install && yarn build
+cd /home/nocobase/nocobase-e2e && yarn install
 ```
 
-添加商业插件自动下载及更新的环境变量
+## 配置 nocobase-e2e 的 `.env`
 
-依赖备份还原插件 @nocobase/plugin-backups
-https://docs-cn.nocobase.com/handbook/backups
+切换到 nocobase-e2e 目录
 
 ```bash
+cd /home/nocobase/nocobase-e2e
+```
+
+修改 .env 配置
+
+```bash
+APP_ENV=production                        # production 环境，代码需要 yarn build
+APP_ROOT=/home/nocobase/nocobase-app      # NocoBase 应用的根目录
+APP_BASE_URL=http://localhost:${port}/    # 应用 URL 模板，一般不用修改
+
+## 商业插件下载（非必须）
 NOCOBASE_PKG_URL=https://pkg.nocobase.com/
-NOCOBASE_PKG_USERNAME=your-username   # service 平台用户名
-NOCOBASE_PKG_PASSWORD=your-password   # service 平台用户密码
+NOCOBASE_PKG_USERNAME=your-username
+NOCOBASE_PKG_PASSWORD=your-password
+
+## Postgres 数据库信息
+POSTGRES_DB_DIALECT=postgres
+POSTGRES_DB_TABLE_PREFIX=
+POSTGRES_DB_HOST=localhost
+POSTGRES_DB_PORT=10103
+POSTGRES_DB_DATABASE=nocobase-e2e
+POSTGRES_DB_USER=nocobase
+POSTGRES_DB_PASSWORD=nocobase
+POSTGRES_DB_UNDERSCORED=true
 ```
 
-安装 pg 客户端，如 MacOS
+## 安装依赖
+
+如果本地不支持 pg_dump 和 pg_restore 命令，需要安装 pg 客户端
 
 ```bash
+# MacOS 系统
 brew install libpq
+```
+
+以下命令会安装 chromium 和 nocobase 的商业插件（如果配置了 NOCOBASE_PKG_ 相关环境变量）
+
+```bash
+yarn e2e install
+```
+
+如果没有配置 `NOCOBASE_PKG_` 相关环境变量，需要手动下载 `@nocobase/plugin-backups` 插件。如：
+
+```bash
+mkdir -p /home/nocobase/nocobase/storage/plugins/@nocobase/plugin-backups && \
+  tar -xvzf /home/nocobase/plugin-backups-1.4.0-alpha.20240906133133.tgz \
+  -C /home/nocobase/nocobase/storage/plugins/@nocobase/plugin-backups \
+  --strip-components=1
 ```
 
 ## 运行 E2E
 
-配置 .env
-
 ```bash
-APP_ROOT=/app/my-nocobase               # NocoBase 应用的根目录
-APP_BASE_URL=http://localhost:${port}/  # 应用 URL 模板，一般不用修改
-```
-
-运行测试
-
-```bash
-yarn install
-
 # 默认为开发模式 yarn dev 运行的 NocoBase
-yarn e2e test my-project1
+yarn e2e test my-project1 --production
 
 # 生产环境 yarn start 运行的 NocoBase
-yarn e2e test my-project1 --production
+yarn e2e test my-project1 --development
 
 # UI 模式
 yarn e2e test my-project1 --ui

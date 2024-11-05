@@ -8,6 +8,8 @@ const path = require('path');
 const { glob } = require('glob');
 const fs = require('fs-extra');
 
+require('dotenv').config();
+
 process.on('SIGINT', async () => {
   treeKill(process.pid, (error) => {
     if (error) {
@@ -98,6 +100,15 @@ async function appReady({ appBaseURL }) {
   console.log('UI is ready.');
 }
 
+async function getProjectConfig(projectRoot) {
+  try {
+    return await fs.readJson(path.resolve(projectRoot, 'config.json'));
+  } catch (error) {
+    
+    return {};
+  }
+}
+
 const { Command } = require('commander');
 const program = new Command();
 
@@ -106,13 +117,36 @@ program
   .description('CLI to some JavaScript string utilities')
   .version('1.0');
 
+program.command('postinstall').action(async () => {
+  if (await fs.exists('.env')) {
+    return;
+  }
+
+  const data = await fs.readFile('.env.example');
+  await fs.writeFile('.env', data);
+});
+
+program.command('install')
+  .action(async () => {
+    await execa('yarn', ['playwright', 'install']);
+    await execa('yarn', ['nocobase', 'pkg', 'download-pro'], {
+      cwd: process.env.APP_ROOT,
+      stdio: 'inherit',
+      env: {
+        NOCOBASE_PKG_URL: process.env.NOCOBASE_PKG_URL || 'https://pkg.nocobase.com/',
+        NOCOBASE_PKG_USERNAME: process.env.NOCOBASE_PKG_USERNAME,
+        NOCOBASE_PKG_PASSWORD: process.env.NOCOBASE_PKG_PASSWORD,
+      },
+    });
+  });
+
 program.command('test')
   .argument('<project>')
   .option('--app-root [appRoot]')
   .option('--ui')
   .option('--production')
+  .option('--development')
   .action(async (project, options) => {
-    require('dotenv').config();
     const { appRoot } = options;
     const DB_SCHEMA = `s_${uid()}`;
     const PROJECT_ROOT = path.resolve(process.cwd(), 'projects', project);
@@ -126,21 +160,41 @@ program.command('test')
     const SOCKET_PATH = path.resolve(PROJECT_ROOT, 'playwright', `gateway/${DB_SCHEMA}.sock`);
     const PM2_HOME = path.resolve(PROJECT_ROOT, 'playwright', `.pm2/${DB_SCHEMA}`);
     const APP_BASE_URL = process.env.APP_BASE_URL.replace('${port}', port);
-    const APP_ENV = options.production ? 'production' : 'development';
+    let APP_ENV = process.env.APP_ENV || 'development';
+    if (options.production) {
+      APP_ENV = 'production';
+    }
+    if (options.development) {
+      APP_ENV = 'development';
+    }
     console.log(`Visit: ${APP_BASE_URL}`);
+    const config = await getProjectConfig();
+    const dialect = config?.env?.DB_DIALECT || 'postgres';
+    const envs = {};
+    const keys = ['DB_HOST', 'DB_PORT', 'DB_DATABASE', 'DB_USER', 'DB_PASSWORD', 'DB_UNDERSCORED'];
+    for (const key of keys) {
+      const value = process.env[`${dialect.toUpperCase()}_${key}`];
+      if (value) {
+        envs[key] = value;
+      }
+    }
     await execa('yarn', ['nocobase', 'restore', restoreFile, `--schema=${DB_SCHEMA}`], {
       cwd,
       stdio: 'inherit',
       env: {
+        DB_DIALECT: dialect,
         DB_SCHEMA,
         APP_ENV,
         NODE_ENV: APP_ENV,
+        ...envs,
+        ...config.env,
       },
     });
-    execa('yarn', [options.production ? 'start' : 'dev', `--port=${port}`], {
+    execa('yarn', [APP_ENV === 'production' ? 'start' : 'dev', `--port=${port}`], {
       cwd,
       stdio: 'ignore',
       env: {
+        DB_DIALECT: dialect,
         DB_SCHEMA,
         PM2_HOME,
         SOCKET_PATH,
@@ -148,6 +202,8 @@ program.command('test')
         APP_CLIENT_CACHE_DIR: `node_modules/.cache/${DB_SCHEMA}`,
         APP_ENV,
         NODE_ENV: APP_ENV,
+        ...envs,
+        ...config.env,
       },
     });
     console.log(`Visit: ${APP_BASE_URL}`);
