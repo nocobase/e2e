@@ -1,0 +1,53 @@
+
+networks:
+  nocobase:
+    driver: bridge
+services:
+  mysql:
+    image: mysql:8
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DB_DATABASE}
+      MYSQL_USER: nocobase
+      MYSQL_PASSWORD: ${MYSQL_DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_DB_PASSWORD}
+    restart: always
+    ports:
+      - "${MYSQL_DB_PORT}:3306"
+    networks:
+      - nocobase
+  kingbase:
+    image: registry.cn-shanghai.aliyuncs.com/nocobase/kingbase:v009r001c001b0030_single_x86
+    platform: linux/amd64
+    restart: always
+    privileged: true
+    networks:
+      - nocobase
+    ports:
+      - "${KINGBASE_DB_PORT}:54321"
+    environment:
+      ENABLE_CI: no
+      DB_USER: ${KINGBASE_DB_USER}
+      DB_PASSWORD: ${KINGBASE_DB_DATABASE}
+      DB_MODE: pg
+      NEED_START: yes
+    command: ["/usr/sbin/init"]
+  postgres:
+    image: postgres:16
+    restart: always
+    networks:
+      - nocobase
+    command: postgres -c wal_level=logical
+    ports:
+      - "${POSTGRES_DB_PORT}:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_DB_USER}
+      POSTGRES_DB: ${POSTGRES_DB_DATABASE}
+      POSTGRES_PASSWORD: ${POSTGRES_DB_PASSWORD}
+  adminer:
+    image: nocobase/adminer
+    platform: linux/amd64
+    restart: always
+    networks:
+      - nocobase
+    ports:
+      - ${ADMINER_PORT}:8080

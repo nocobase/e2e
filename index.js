@@ -159,7 +159,7 @@ program.command('test')
     const port = await getPort();
     const SOCKET_PATH = path.resolve(PROJECT_ROOT, 'playwright', `gateway/${DB_SCHEMA}.sock`);
     const PM2_HOME = path.resolve(PROJECT_ROOT, 'playwright', `.pm2/${DB_SCHEMA}`);
-    const APP_BASE_URL = process.env.APP_BASE_URL.replace('${port}', port);
+    const APP_BASE_URL = process.env.APP_BASE_URL.replace('{{port}}', port);
     let APP_ENV = process.env.APP_ENV || 'development';
     if (options.production) {
       APP_ENV = 'production';

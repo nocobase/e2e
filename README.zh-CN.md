@@ -25,7 +25,7 @@ cd /home/nocobase/nocobase-e2e
 ```bash
 APP_ENV=production                        # production 环境，代码需要 yarn build
 APP_ROOT=/home/nocobase/nocobase-app      # NocoBase 应用的根目录
-APP_BASE_URL=http://localhost:${port}/    # 应用 URL 模板，一般不用修改
+APP_BASE_URL="http://localhost:{{port}}/" # 应用 URL 模板，一般不用修改
 
 ## 商业插件下载（非必须）
 NOCOBASE_PKG_URL=https://pkg.nocobase.com/
@@ -41,6 +41,16 @@ POSTGRES_DB_DATABASE=nocobase-e2e
 POSTGRES_DB_USER=nocobase
 POSTGRES_DB_PASSWORD=nocobase
 POSTGRES_DB_UNDERSCORED=true
+```
+
+## 启动数据库服务
+
+可以按需启动 `./docker-compose.yml` 提供的数据库
+
+```bash
+cd /home/nocobase/nocobase-e2e
+# 启动 postgres
+docker compose up -d postgres
 ```
 
 ## 安装依赖
