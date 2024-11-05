@@ -57,6 +57,14 @@ yarn e2e test my-project1 --production
 
 # UI 模式
 yarn e2e test my-project1 --ui
+
+# 同一个项目可以同时运行多次，互相隔离，不干预
+# 实例 1
+yarn e2e test my-project1
+# 实例 2
+yarn e2e test my-project1
+# 实例 3
+yarn e2e test my-project1
 ```
 
 ## Projects
@@ -71,3 +79,18 @@ yarn e2e test my-project1 --ui
     |- backup_20241103_201447_2067.nbdata   # 备份文件 .nbdata 后缀即可
     |- playwright.config.ts                 # 非必须，特殊情况，可以自定义 playwright.config.ts 
 ```
+
+## 答疑
+
+### 为什么是独立的，不是和源码一起维护？
+
+1. NocoBase 有三种安装方式，生产和开发两种运行模式，独立的框架更便于测试不同环境和不同运行模式组合的情况
+2. e2e 是系统测试，黑盒测试，与源码无关
+
+## 为什么以项目划分？
+
+和我们任务管理的方式一致，e2e 也是以项目为单位进行划分，每个项目都有自己的备份文件，用于还原测试场景。
+
+## 测试是隔离的吗？
+
+每个 e2e test 的环境都是隔离的，即使同一个项目同时运行多次也都是隔离的。
