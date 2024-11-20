@@ -1,6 +1,6 @@
 {
-  "displayName": "My Project3",
-  "version": "v1.4.0-beta",
+  "displayName": "基础示例",
+  "version": "1.4.0-alpha",
   "env": {
     "DB_DIALECT": "postgres",
     "DB_UNDERSCORED": true

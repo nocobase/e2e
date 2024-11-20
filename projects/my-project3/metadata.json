@@ -1,0 +1,8 @@
+{
+  "displayName": "Demo 应用模板",
+  "version": "v1.4.0-beta",
+  "env": {
+    "DB_DIALECT": "postgres",
+    "DB_UNDERSCORED": false
+  }
+}
