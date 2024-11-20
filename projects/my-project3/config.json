@@ -1,6 +1,6 @@
 {
-  "displayName": "My Project1",
-  "version": "1.3.50-beta",
+  "displayName": "My Project3",
+  "version": "v1.4.0-beta",
   "env": {
     "DB_DIALECT": "postgres",
     "DB_UNDERSCORED": true
