@@ -3,6 +3,6 @@
   "version": "1.3.50-beta",
   "env": {
     "DB_DIALECT": "postgres",
-    "DB_UNDERSCORED": false
+    "DB_UNDERSCORED": true
   }
 }
