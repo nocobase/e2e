@@ -102,7 +102,7 @@ async function appReady({ appBaseURL }) {
 
 async function getProjectConfig(projectRoot) {
   try {
-    return await fs.readJson(path.resolve(projectRoot, 'config.json'));
+    return await fs.readJson(path.resolve(projectRoot, 'metadata.json'));
   } catch (error) {
     
     return {};

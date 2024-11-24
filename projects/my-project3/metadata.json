@@ -1,5 +1,5 @@
 {
-  "displayName": "Demo 应用模板",
+  "displayName": "DEMO 平台模板",
   "version": "v1.4.0-beta",
   "env": {
     "DB_DIALECT": "postgres",

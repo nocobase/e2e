@@ -1,5 +1,5 @@
 {
-  "displayName": "测试应用模板",
+  "displayName": "旧模板（基于 0.12）",
   "version": "1.3.50-beta",
   "env": {
     "DB_DIALECT": "postgres",
