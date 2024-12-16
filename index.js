@@ -102,7 +102,7 @@ async function appReady({ appBaseURL }) {
 
 async function getProjectConfig(projectRoot) {
   try {
-    return await fs.readJson(path.resolve(projectRoot, 'metadata.json'));
+    return await fs.readJson(path.resolve('projects', projectRoot, 'metadata.json'));
   } catch (error) {
     
     return {};
@@ -157,8 +157,8 @@ program.command('test')
     const restoreFile = path.resolve(PROJECT_ROOT, backupFiles[0]);
     const cwd = appRoot || process.env.APP_ROOT;
     const port = await getPort();
-    const SOCKET_PATH = path.resolve(PROJECT_ROOT, 'playwright', `gateway/${DB_SCHEMA}.sock`);
-    const PM2_HOME = path.resolve(PROJECT_ROOT, 'playwright', `.pm2/${DB_SCHEMA}`);
+    const PM2_HOME = path.resolve(cwd, 'storage', '.playwright', project, DB_SCHEMA, '.pm2');
+    const SOCKET_PATH = path.resolve(cwd, 'storage', '.playwright', project, DB_SCHEMA, `gateway.sock`);
     const APP_BASE_URL = process.env.APP_BASE_URL.replace('{{port}}', port);
     let APP_ENV = process.env.APP_ENV || 'development';
     if (options.production) {
@@ -168,7 +168,7 @@ program.command('test')
       APP_ENV = 'development';
     }
     console.log(`Visit: ${APP_BASE_URL}`);
-    const config = await getProjectConfig();
+    const config = await getProjectConfig(project);
     const dialect = config?.env?.DB_DIALECT || 'postgres';
     const envs = {};
     const keys = ['DB_HOST', 'DB_PORT', 'DB_DATABASE', 'DB_USER', 'DB_PASSWORD', 'DB_UNDERSCORED'];
@@ -202,6 +202,7 @@ program.command('test')
         APP_CLIENT_CACHE_DIR: `node_modules/.cache/${DB_SCHEMA}`,
         APP_ENV,
         NODE_ENV: APP_ENV,
+        APP_PORT: port,
         ...envs,
         ...config.env,
       },
