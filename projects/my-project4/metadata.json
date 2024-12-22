@@ -1,6 +1,6 @@
 {
-  "displayName": "旧模板（基于 0.12）",
-  "version": "1.3.50-beta",
+  "displayName": "测试模板库",
+  "version": "v1.4.10-rc",
   "env": {
     "DB_DIALECT": "postgres",
     "DB_UNDERSCORED": true
