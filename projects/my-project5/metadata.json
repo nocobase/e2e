@@ -1,0 +1,8 @@
+{
+  "displayName": "文件管理器",
+  "version": "v1.6.0",
+  "env": {
+    "DB_DIALECT": "postgres",
+    "DB_UNDERSCORED": true
+  }
+}
