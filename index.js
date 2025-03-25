@@ -157,8 +157,8 @@ program.command('test')
     const restoreFile = path.resolve(PROJECT_ROOT, backupFiles[0]);
     const cwd = appRoot || process.env.APP_ROOT;
     const port = await getPort();
-    const PM2_HOME = path.resolve(cwd, 'storage', '.playwright', project, DB_SCHEMA, '.pm2');
-    const SOCKET_PATH = path.resolve(cwd, 'storage', '.playwright', project, DB_SCHEMA, `gateway.sock`);
+    const PM2_HOME = path.resolve(PROJECT_ROOT, 'playwright', 'schemas', DB_SCHEMA, '.pm2');
+    const SOCKET_PATH = path.resolve(PROJECT_ROOT, 'playwright', 'schemas', DB_SCHEMA, `gateway.sock`);
     const APP_BASE_URL = process.env.APP_BASE_URL.replace('{{port}}', port);
     let APP_ENV = process.env.APP_ENV || 'development';
     if (options.production) {
@@ -186,6 +186,23 @@ program.command('test')
         DB_SCHEMA,
         APP_ENV,
         NODE_ENV: APP_ENV,
+        ...envs,
+        ...config.env,
+      },
+    });
+    await execa('yarn', ['nocobase', 'upgrade', '--skip-code-update'], {
+      cwd,
+      stdio: 'inherit',
+      env: {
+        DB_DIALECT: dialect,
+        DB_SCHEMA,
+        PM2_HOME,
+        SOCKET_PATH,
+        WATCH_FILE: path.resolve(cwd, `storage/.cache/app-watch/${DB_SCHEMA}.ts`),
+        APP_CLIENT_CACHE_DIR: `node_modules/.cache/${DB_SCHEMA}`,
+        APP_ENV,
+        NODE_ENV: APP_ENV,
+        APP_PORT: port,
         ...envs,
         ...config.env,
       },
