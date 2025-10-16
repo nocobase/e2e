@@ -1,0 +1,8 @@
+{
+  "displayName": "Demo 2.0",
+  "version": "v2.0.0-alpha.1",
+  "env": {
+    "DB_DIALECT": "postgres",
+    "DB_UNDERSCORED": false
+  }
+}
