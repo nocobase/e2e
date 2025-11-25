@@ -1,0 +1,8 @@
+{
+  "displayName": "关系外键为非 ID 的场景",
+  "version": "v2.0.0-alpha.1",
+  "env": {
+    "DB_DIALECT": "postgres",
+    "DB_UNDERSCORED": true
+  }
+}
