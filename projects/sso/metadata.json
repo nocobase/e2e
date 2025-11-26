@@ -1,0 +1,8 @@
+{
+  "displayName": "SSO",
+  "version": "v1.9.13",
+  "env": {
+    "DB_DIALECT": "postgres",
+    "DB_UNDERSCORED": true
+  }
+}
