@@ -1,0 +1,8 @@
+{
+  "displayName": "测试数据",
+  "version": "v2.0.0-alpha.52",
+  "env": {
+    "DB_DIALECT": "postgres",
+    "DB_UNDERSCORED": true
+  }
+}
