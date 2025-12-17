@@ -1,0 +1,8 @@
+{
+  "displayName": "2.0筛选",
+  "version": "v2.0.0-alpha.32",
+  "env": {
+    "DB_DIALECT": "postgres",
+    "DB_UNDERSCORED": true
+  }
+}
