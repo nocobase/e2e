@@ -1,6 +1,6 @@
 {
-  "displayName": "2.0操作",
-  "version": "v2.0.0-alpha.32",
+  "displayName": "关系权限",
+  "version": "v2.0.0-alpha.56",
   "env": {
     "DB_DIALECT": "postgres",
     "DB_UNDERSCORED": true
