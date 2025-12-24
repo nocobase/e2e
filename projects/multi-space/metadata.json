@@ -1,0 +1,8 @@
+{
+  "displayName": "多空间",
+  "version": "v2.0.0-alpha.56",
+  "env": {
+    "DB_DIALECT": "postgres",
+    "DB_UNDERSCORED": true
+  }
+}
