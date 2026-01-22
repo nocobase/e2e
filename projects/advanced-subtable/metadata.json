@@ -1,0 +1,8 @@
+{
+  "displayName": "2.0高级子表格",
+  "version": "v2.0.0-alpha.66",
+  "env": {
+    "DB_DIALECT": "postgres",
+    "DB_UNDERSCORED": true
+  }
+}
