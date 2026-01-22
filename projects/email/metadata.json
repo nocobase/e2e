@@ -1,0 +1,8 @@
+{
+  "displayName": "邮件",
+  "version": "v2.0.0-alpha.66",
+  "env": {
+    "DB_DIALECT": "postgres",
+    "DB_UNDERSCORED": true
+  }
+}
