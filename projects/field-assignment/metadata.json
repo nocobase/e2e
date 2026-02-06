@@ -1,0 +1,8 @@
+{
+  "displayName": "字段赋值-2.0",
+  "version": "v2.0.0-beta.13",
+  "env": {
+    "DB_DIALECT": "postgres",
+    "DB_UNDERSCORED": true
+  }
+}

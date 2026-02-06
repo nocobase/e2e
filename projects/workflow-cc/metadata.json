@@ -1,0 +1,8 @@
+{
+  "displayName": "工作流-抄送",
+  "version": "v2.0.0-beta.16",
+  "env": {
+    "DB_DIALECT": "postgres",
+    "DB_UNDERSCORED": true
+  }
+}

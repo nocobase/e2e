@@ -1,0 +1,8 @@
+{
+  "displayName": "2.0区块",
+  "version": "v2.0.0-beta.20",
+  "env": {
+    "DB_DIALECT": "postgres",
+    "DB_UNDERSCORED": true
+  }
+}
